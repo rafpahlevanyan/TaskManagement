@@ -1,6 +1,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="taskmanagment.model.User" %>
-<%@ page import="taskmanagment.model.Task" %><%--
+<%@ page import="taskmanagment.model.Task" %>
+<%@ page import="java.text.SimpleDateFormat" %><%--
   Created by IntelliJ IDEA.
   User: User
   Date: 16.02.2022
@@ -13,8 +14,9 @@
     <title>Home Page</title>
 </head>
 <body>
-<%List<User> users = (List<User>) request.getAttribute("users");%>
-<% List<Task> tasks = (List<Task>) request.getAttribute("tasks");%>
+<%List<User> users = (List<User>) request.getAttribute("users");
+List<Task> tasks = (List<Task>) request.getAttribute("tasks");
+    SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");%>
 <a href="/logout">Logout</a>
 <div style="width: 700px">
     <div style="width: 350px;float: left">
@@ -44,6 +46,7 @@
             </select><br>
             <select name="user_id">
                     <%
+
                     for (User user : users) { %>
 
                 <option value="<%=user.getId()%>"><%=user.getName()%><%=user.getSurname()%>
@@ -66,6 +69,7 @@
             <th>Surname</th>
             <th>Email</th>
             <th>Type</th>
+            <th>Action</th>
         </tr>
         <%
             for (User user : users) { %>
@@ -80,6 +84,7 @@
             </td>
             <td><%=user.getType().name()%>
             </td>
+            <td><a href="/deleteUser?id=<%=user.getId()%>">Delete</a></td>
         </tr>
         <%
             }
@@ -92,15 +97,57 @@
 
     <table border="1">
         <tr>
-            <th>Id</th>
+            <td>ID</td>
             <th>Name</th>
             <th>Description</th>
             <th>Deadline</th>
             <th>Status</th>
             <th>User</th>
+            <th>Change Deadline</th>
+            <th>Change Status</th>
+            <th>Action</th>
+
+        </tr>
+        <%for (Task task : tasks) {
+                if (task.isExpired()) {%>
+        <tr style="background-color: red">
+            <td><%=task.getId()%>
+            </td>
+            <td><%=task.getName()%>
+            </td>
+            <td><%=task.getDescription()%>
+            </td>
+            <td><%=sdf.format(task.getDeadline())%>
+            </td>
+            <td><%=task.getStatus().name()%>
+            </td>
+            <td><%=task.getUser().getName() + " " + task.getUser().getSurname()%>
+            </td>
+            <td>
+                <form action="/changeDeadline" method="post">
+                    <label>
+                        <input type="hidden" name="taskId" value="<%=task.getId()%>">
+                        <input type="date" name="date"><br>
+                        <input type="submit" value="Change">
+                    </label>
+                </form></td>
+            <td>
+                <form action="/changeTaskStatus" method="post">
+                    <input type="hidden" name="taskId" value="<%=task.getId()%>">
+                    <select name="status">
+                        <option value="NEW">NEW</option>
+                        <option value="IN_PROGRESS">IN_PROGRESS</option>
+                        <option value="FINISHED">FINISHED</option>
+
+                    </select><br>
+                    <input type="submit" value="Change">
+                </form>
+            </td>
+            <td><a href="/deleteTask?id=<%=task.getId()%>">Delete</a> </td>
         </tr>
         <%
-            for (Task task : tasks) { %>
+        } else {
+        %>
         <tr>
             <td><%=task.getId()%>
             </td>
@@ -108,14 +155,35 @@
             </td>
             <td><%=task.getDescription()%>
             </td>
-            <td><%=task.getDeadline()%>
+            <td><%=sdf.format(task.getDeadline())%>
             </td>
             <td><%=task.getStatus().name()%>
             </td>
             <td><%=task.getUser().getName() + " " + task.getUser().getSurname()%>
             </td>
+            <td><form action="/changeDeadline" method="post">
+                <label>
+                    <input type="hidden" name="taskId" value="<%=task.getId()%>">
+                    <input type="date" name="date"><br>
+                    <input type="submit" value="Change">
+                </label>
+            </form></td>
+            <td>
+                <form action="/changeTaskStatus" method="post">
+                    <input type="hidden" name="taskId" value="<%=task.getId()%>">
+                    <select name="status">
+                        <option value="NEW">NEW</option>
+                        <option value="IN_PROGRESS">IN_PROGRESS</option>
+                        <option value="FINISHED">FINISHED</option>
+                    </select><br>
+                    <input type="submit" value="Change">
+                </form>
+            </td>
+            <td><a href="/deleteTask?id=<%=task.getId()%>">Delete</a> </td>
         </tr>
+
         <%
+                }
             }
         %>
     </table>

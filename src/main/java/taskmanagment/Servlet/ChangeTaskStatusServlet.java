@@ -25,9 +25,10 @@ public class ChangeTaskStatusServlet extends HttpServlet {
 
         TaskManager taskManager = new TaskManager();
         taskManager.updateTaskStatus(taskId, taskStatus);
-        if (user.getType() == UserType.MANAGER){
+
+        if (user.getType() == UserType.MANAGER) {
             resp.sendRedirect("/managerHome");
-        }else {
+        } else if (user.getType() == UserType.USER) {
             resp.sendRedirect("/userHome");
         }
 

@@ -10,9 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-
-@WebFilter(urlPatterns = {"/userHome"})
-public class UserAuthFilter implements Filter {
+@WebFilter(urlPatterns = "/changeTaskStatus")
+public class ChangeTaskStatusFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
 
@@ -22,17 +21,22 @@ public class UserAuthFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
-        if (user == null || user.getType() != UserType.USER) {
-            HttpServletResponse response = (HttpServletResponse) servletResponse;
-            response.sendRedirect("/index.jsp");
+        HttpServletResponse response = (HttpServletResponse) servletResponse;
 
-        } else {
-            filterChain.doFilter(servletRequest, servletResponse);
+
+        User user = (User)session.getAttribute("user");
+
+        if(user == null){
+            response.sendRedirect("/index.jsp");
+        }else if(user.getType() == UserType.MANAGER || user.getType() == UserType.USER){
+            filterChain.doFilter(servletRequest,servletResponse);
         }
+
+
     }
 
     @Override
     public void destroy() {
+
     }
 }

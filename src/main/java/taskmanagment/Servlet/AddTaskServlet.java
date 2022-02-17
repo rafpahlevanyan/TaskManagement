@@ -16,7 +16,7 @@ import java.text.SimpleDateFormat;
 
 
 @WebServlet(urlPatterns = "/addTask")
-public class AddTaskServlet extends HttpServlet { //vorn e ed jsp
+public class AddTaskServlet extends HttpServlet {
 
     private TaskManager taskManager = new TaskManager();
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -40,6 +40,7 @@ public class AddTaskServlet extends HttpServlet { //vorn e ed jsp
                     .status(TaskStatus.valueOf(status))
                     .userId(userId)
                     .build());
+
             resp.sendRedirect("/managerHome");
         } catch (ParseException e) {
             e.printStackTrace();

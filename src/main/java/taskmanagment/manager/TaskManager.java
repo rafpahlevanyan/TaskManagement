@@ -1,5 +1,6 @@
 package taskmanagment.manager;
 
+import com.mysql.cj.result.SqlDateValueFactory;
 import taskmanagment.db.DBConnectionProvider;
 import taskmanagment.model.Task;
 import taskmanagment.model.TaskStatus;
@@ -39,6 +40,8 @@ public class TaskManager {
         }
     }
 
+
+
     public Task getById(int id) {
         String sql = "SELECT * FROM task WHERE id = " + id;
         try {
@@ -66,11 +69,12 @@ public class TaskManager {
 
     }
 
-    public boolean delete(long id) {
-        String sql = "DELETE FROM task WHERE id =" + id;
+    public boolean delete(int id) {
+        String sql = "DELETE FROM task WHERE id = ?";
         try {
-            Statement statement = connection.createStatement();
-            statement.executeUpdate(sql);
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1,id);
+            statement.executeUpdate();
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -104,9 +108,10 @@ public class TaskManager {
 
     public List<Task> getAllTasksByUser(int userId) {
         List<Task> tasks = new ArrayList<>();
-        String sql = "SELECT * FROM task WHERE user_id = " + userId;
+        String sql = "SELECT * FROM task WHERE user_id = ?";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1,userId);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 tasks.add(getTaskFromResultSet(resultSet));
@@ -150,4 +155,17 @@ public class TaskManager {
         return tasks;
     }
 
+    public boolean changeTaskDeadline(int id, String date) {
+        String sql = "UPDATE task SET deadline = ? WHERE id = ?";
+        try{
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1,date);
+            statement.setInt(2,id);
+            statement.executeUpdate();
+            return true;
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

@@ -21,6 +21,7 @@ public class Task {
     private TaskStatus status;
     private int userId;
     private User user;
+    private boolean isExpired;
 
 
 

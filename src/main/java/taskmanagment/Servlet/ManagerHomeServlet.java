@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 @WebServlet(urlPatterns = "/managerHome")
@@ -24,6 +25,11 @@ public class ManagerHomeServlet extends HttpServlet {
             UserManager userManager = new UserManager();
 
             List<Task> allTasks = taskManager.getAllTasks();
+        for (Task task : allTasks) {
+            if(new Date().after(task.getDeadline())){
+                task.setExpired(true);
+            }
+        }
             List<User> allUsers = userManager.getAllUsers();
             req.setAttribute("tasks", allTasks);
             req.setAttribute("users", allUsers);

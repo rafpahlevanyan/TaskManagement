@@ -175,10 +175,11 @@ public class UserManager {
     }
 
     public void deleteUserById(int id) {
-        String sql = "delete from user where id = " + id;
+        String sql = "delete from user where id = ?";
         try {
-            Statement statement = connection.createStatement();
-            statement.executeUpdate(sql);
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1,id);
+            statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
