@@ -22,6 +22,7 @@ public class Task {
     private int userId;
     private User user;
     private boolean isExpired;
+    private boolean isCloseToExpire;
 
 
 

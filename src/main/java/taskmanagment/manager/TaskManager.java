@@ -154,6 +154,20 @@ public class TaskManager {
         }
         return tasks;
     }
+    public List<Task> getAllFinishedTasks() {
+        List<Task> tasks = new ArrayList<>();
+        String sql = "SELECT * FROM task where status = 'FINISHED'";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                tasks.add(getTaskFromResultSet(resultSet));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return tasks;
+    }
 
     public boolean changeTaskDeadline(int id, String date) {
         String sql = "UPDATE task SET deadline = ? WHERE id = ?";

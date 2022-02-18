@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -21,21 +22,31 @@ public class ManagerHomeServlet extends HttpServlet {
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-            TaskManager taskManager = new TaskManager();
-            UserManager userManager = new UserManager();
+        TaskManager taskManager = new TaskManager();
+        UserManager userManager = new UserManager();
 
-            List<Task> allTasks = taskManager.getAllTasks();
+        List<Task> allTasks = taskManager.getAllTasks();
         for (Task task : allTasks) {
-            if(new Date().after(task.getDeadline())){
+            if (new Date().after(task.getDeadline())) {
                 task.setExpired(true);
             }
         }
-            List<User> allUsers = userManager.getAllUsers();
-            req.setAttribute("tasks", allTasks);
-            req.setAttribute("users", allUsers);
-            req.getRequestDispatcher("/WEB-INF/manager.jsp").forward(req, resp);
-        }
 
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.add(Calendar.DATE, 3);
+        Date beforeThreeDays = calendar.getTime();
+        for (Task task : allTasks) {
+            if (task.getDeadline().before(beforeThreeDays) && task.getDeadline().after(new Date())) {
+                task.setCloseToExpire(true);
+            }
+        }
+        List<User> allUsers = userManager.getAllUsers();
+        req.setAttribute("tasks", allTasks);
+        req.setAttribute("users", allUsers);
+        req.getRequestDispatcher("/WEB-INF/manager.jsp").forward(req, resp);
     }
+
+}
 
 

@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -27,8 +28,18 @@ public class UserHomeServlet extends HttpServlet {
 
         List<Task> allTaskByUserId = taskManager.getAllTasksByUser(user.getId());
         for (Task task : allTaskByUserId) {
-            if(new Date().after(task.getDeadline())){
+            if (new Date().after(task.getDeadline())) {
                 task.setExpired(true);
+            }
+        }
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.add(Calendar.DATE, 3);
+        Date beforeThreeDays = calendar.getTime();
+        for (Task task : allTaskByUserId) {
+            if (task.getDeadline().before(beforeThreeDays) && task.getDeadline().after(new Date())) {
+                task.setCloseToExpire(true);
             }
         }
 
