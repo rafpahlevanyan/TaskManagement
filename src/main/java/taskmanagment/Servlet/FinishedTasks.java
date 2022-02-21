@@ -2,7 +2,6 @@ package taskmanagment.Servlet;
 
 import taskmanagment.manager.TaskManager;
 import taskmanagment.model.Task;
-import taskmanagment.model.TaskStatus;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,16 +13,17 @@ import java.util.List;
 
 @WebServlet(urlPatterns = "/finishedTasks")
 public class FinishedTasks extends HttpServlet {
-    TaskManager taskManager = new TaskManager();
-    Task task = new Task();
+    private TaskManager taskManager = new TaskManager();
+
+
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
 
-            List<Task> finishedTasks = taskManager.getAllFinishedTasks();
+        List<Task> finishedTasks = taskManager.getAllFinishedTasks();
 
-                req.setAttribute("finishedTasks",finishedTasks);
-                req.getRequestDispatcher("/WEB-INF/finishedTasks.jsp").forward(req,resp);
+        req.setAttribute("finishedTasks", finishedTasks);
+        req.getRequestDispatcher("/WEB-INF/finishedTasks.jsp").forward(req, resp);
 
     }
 }

@@ -24,12 +24,12 @@ public class ChangeTaskStatusFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
 
-        User user = (User)session.getAttribute("user");
+        User user = (User) session.getAttribute("user");
 
-        if(user == null){
+        if (user == null) {
             response.sendRedirect("/index.jsp");
-        }else if(user.getType() == UserType.MANAGER || user.getType() == UserType.USER){
-            filterChain.doFilter(servletRequest,servletResponse);
+        } else if (user.getType() == UserType.MANAGER || user.getType() == UserType.USER) {
+            filterChain.doFilter(servletRequest, servletResponse);
         }
 
 

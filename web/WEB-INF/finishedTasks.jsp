@@ -24,7 +24,7 @@
 
 <table border="1">
     <tr>
-        <td>ID</td>
+        <th>ID</th>
         <th>Name</th>
         <th>Description</th>
         <th>Deadline</th>
@@ -33,12 +33,14 @@
 
 
     </tr>
-
     <%
         for (Task task : finishedTasks) {
 
+
     %>
     <tr>
+
+
         <td><%=task.getId()%>
         </td>
         <td><%=task.getName()%>
@@ -53,10 +55,11 @@
         </td>
     </tr>
 
-</table>
-<%
 
-    }
-%>
+    <%
+
+        }
+    %>
+</table>
 </body>
 </html>

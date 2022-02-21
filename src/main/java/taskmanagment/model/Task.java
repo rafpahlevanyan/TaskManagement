@@ -25,6 +25,4 @@ public class Task {
     private boolean isCloseToExpire;
 
 
-
-
 }

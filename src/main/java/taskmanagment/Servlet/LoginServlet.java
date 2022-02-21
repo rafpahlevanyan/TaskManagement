@@ -15,23 +15,26 @@ import java.io.IOException;
 
 @WebServlet(urlPatterns = "/login")
 public class LoginServlet extends HttpServlet {
+
+    private UserManager userManager = new UserManager();
+
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         String email = req.getParameter("email");
         String password = req.getParameter("password");
 
-        UserManager userManager = new UserManager();
+
 
         User user = userManager.getByEmailAndPassword(email, password);
         if (user == null) {
             req.getRequestDispatcher("/index.jsp").forward(req, resp);
-        }else {
+        } else {
             HttpSession session = req.getSession();
-            session.setAttribute("user",user);
-            if (user.getType() == UserType.MANAGER){
+            session.setAttribute("user", user);
+            if (user.getType() == UserType.MANAGER) {
                 resp.sendRedirect("/managerHome");
-            }else {
+            } else {
                 resp.sendRedirect("/userHome");
             }
         }

@@ -1,7 +1,8 @@
 <%@ page import="taskmanagment.model.Task" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.text.SimpleDateFormat" %>
-<%@ page import="taskmanagment.model.TaskStatus" %><%--
+<%@ page import="taskmanagment.model.TaskStatus" %>
+<%@ page import="taskmanagment.model.User" %><%--
   Created by IntelliJ IDEA.
   User: User
   Date: 16.02.2022
@@ -15,7 +16,11 @@
 </head>
 <body>
 <% List<Task> tasks = (List<Task>) request.getAttribute("tasks");
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");%>
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    User user2 = (User) session.getAttribute("user");%>
+
+Welcome <%=user2.getName()%> <% if (user2.getPictureUrl()!=null){%>
+<img src="/image?path=<%=user2.getPictureUrl()%>" style="width: 100px"/><%}%>
 <a href="/logout">Logout</a>
 
 
@@ -35,8 +40,10 @@
 
         </tr>
 
-        <%for (Task task : tasks) {
-            if (task.getStatus()== TaskStatus.FINISHED) {%>
+        <%
+            for (Task task : tasks) {
+                if (task.getStatus() == TaskStatus.FINISHED) {
+        %>
         <tr>
             <td><%=task.getId()%>
             </td>
@@ -65,7 +72,7 @@
 
 
         <%
-        }  else if (task.isExpired()) {%>
+        } else if (task.isExpired()) {%>
         <tr style="background-color: red">
             <td><%=task.getId()%>
             </td>
@@ -94,8 +101,7 @@
 
 
         <%
-        }
-        else if (task.isCloseToExpire()) {%>
+        } else if (task.isCloseToExpire()) {%>
         <tr style="background-color: orange">
             <td><%=task.getId()%>
             </td>
@@ -124,9 +130,7 @@
 
 
         <%
-        }
-
-        else {
+        } else {
         %>
         <tr style="background-color: green">
             <td><%=task.getId()%>
@@ -142,13 +146,15 @@
             <td><%=task.getUser().getName() + " " + task.getUser().getSurname()%>
             </td>
             <td>
-                <form action="/changeTaskStatus" method="post">
+                <form action="${pageContext.request.contextPath}/changeTaskStatus" method="post">
                     <input type="hidden" name="taskId" value="<%=task.getId()%>">
-                    <select name="status">
-                        <option value="NEW">NEW</option>
-                        <option value="IN_PROGRESS">IN_PROGRESS</option>
-                        <option value="FINISHED">FINISHED</option>
-                    </select><br>
+                    <label>
+                        <select name="status">
+                            <option value="NEW">NEW</option>
+                            <option value="IN_PROGRESS">IN_PROGRESS</option>
+                            <option value="FINISHED">FINISHED</option>
+                        </select>
+                    </label><br>
                     <input type="submit" value="Change">
                 </form>
             </td>
@@ -162,9 +168,6 @@
     </table>
 
 </div>
-
-
-
 
 
 </body>

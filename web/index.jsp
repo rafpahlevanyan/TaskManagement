@@ -7,17 +7,17 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
-  <head>
+<head>
     <title>Welcome</title>
-  </head>
-  <body>
+</head>
+<body>
 
-  <form action="login" method="post">
-    Enter username :<input type="text" name="email"> <br>
-    Enter password :<input type="password" name="password"><br>
+<form action="login" method="post">
+    Enter username :<input type="text" name="email" required> <br>
+    Enter password :<input type="password" name="password" required><br>
     <input type="submit" value="Login">
-  </form>
+</form>
 
-  </body>
+</body>
 
 </html>

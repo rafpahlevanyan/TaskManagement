@@ -15,6 +15,9 @@ import java.io.IOException;
 @WebServlet(urlPatterns = "/changeTaskStatus")
 public class ChangeTaskStatusServlet extends HttpServlet {
 
+    private TaskManager taskManager = new TaskManager();
+//    User user = new User();
+
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
@@ -23,7 +26,7 @@ public class ChangeTaskStatusServlet extends HttpServlet {
         int taskId = Integer.parseInt(req.getParameter("taskId"));
         String taskStatus = req.getParameter("status");
 
-        TaskManager taskManager = new TaskManager();
+
         taskManager.updateTaskStatus(taskId, taskStatus);
 
         if (user.getType() == UserType.MANAGER) {

@@ -1,10 +1,8 @@
 package taskmanagment.manager;
 
-import com.mysql.cj.result.SqlDateValueFactory;
 import taskmanagment.db.DBConnectionProvider;
 import taskmanagment.model.Task;
 import taskmanagment.model.TaskStatus;
-import taskmanagment.model.User;
 
 import java.sql.*;
 import java.text.ParseException;
@@ -41,7 +39,6 @@ public class TaskManager {
     }
 
 
-
     public Task getById(int id) {
         String sql = "SELECT * FROM task WHERE id = " + id;
         try {
@@ -73,7 +70,7 @@ public class TaskManager {
         String sql = "DELETE FROM task WHERE id = ?";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setInt(1,id);
+            statement.setInt(1, id);
             statement.executeUpdate();
             return true;
         } catch (SQLException e) {
@@ -111,7 +108,7 @@ public class TaskManager {
         String sql = "SELECT * FROM task WHERE user_id = ?";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setInt(1,userId);
+            statement.setInt(1, userId);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 tasks.add(getTaskFromResultSet(resultSet));
@@ -154,6 +151,7 @@ public class TaskManager {
         }
         return tasks;
     }
+
     public List<Task> getAllFinishedTasks() {
         List<Task> tasks = new ArrayList<>();
         String sql = "SELECT * FROM task where status = 'FINISHED'";
@@ -171,13 +169,13 @@ public class TaskManager {
 
     public boolean changeTaskDeadline(int id, String date) {
         String sql = "UPDATE task SET deadline = ? WHERE id = ?";
-        try{
+        try {
             PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1,date);
-            statement.setInt(2,id);
+            statement.setString(1, date);
+            statement.setInt(2, id);
             statement.executeUpdate();
             return true;
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return false;

@@ -18,5 +18,6 @@ public class User {
     private String email;
     private String password;
     private UserType type;
+    private String pictureUrl;
 
 }

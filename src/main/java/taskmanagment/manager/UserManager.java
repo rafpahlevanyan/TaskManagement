@@ -13,9 +13,9 @@ public class UserManager {
     private Connection connection = DBConnectionProvider.getInstance().getConnection();
 
     public void add(User user) {
-        System.out.println("before saving user");
-        System.out.println(user);
-        String sql = "insert into user(name,surname,email,password,type) VALUES(?,?,?,?,?)";
+//        System.out.println("before saving user");
+//        System.out.println(user);
+        String sql = "insert into user(name,surname,email,password,type,picture_url) VALUES(?,?,?,?,?,?)";
         try {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, user.getName());
@@ -23,39 +23,40 @@ public class UserManager {
             ps.setString(3, user.getEmail());
             ps.setString(4, user.getPassword());
             ps.setString(5, user.getType().name());
+            ps.setString(6, user.getPictureUrl());
             ps.executeUpdate();
             ResultSet resultSet = ps.getGeneratedKeys();
             if (resultSet.next()) {
                 int id = resultSet.getInt(1);
                 user.setId(id);
             }
-            System.out.println("user was added successfully");
-            System.out.println(user);
+//            System.out.println("user was added successfully");
+//            System.out.println(user);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
 
-    public boolean register(User user) {
-        String sql = "INSERT INTO user(name,surname,email,password) VALUES(?,?,?,?)";
-        try {
-            PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            statement.setString(1, user.getName());
-            statement.setString(2, user.getSurname());
-            statement.setString(3, user.getEmail());
-            statement.setString(4, user.getPassword());
-            statement.executeUpdate();
-            ResultSet rs = statement.getGeneratedKeys();
-            if (rs.next()) {
-                user.setId(rs.getInt(1));
-            }
-            return true;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
+//    public boolean register(User user) {
+//        String sql = "INSERT INTO user(name,surname,email,password) VALUES(?,?,?,?)";
+//        try {
+//            PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+//            statement.setString(1, user.getName());
+//            statement.setString(2, user.getSurname());
+//            statement.setString(3, user.getEmail());
+//            statement.setString(4, user.getPassword());
+//            statement.executeUpdate();
+//            ResultSet rs = statement.getGeneratedKeys();
+//            if (rs.next()) {
+//                user.setId(rs.getInt(1));
+//            }
+//            return true;
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//            return false;
+//        }
+//    }
 
     public User getById(int id) {
 
@@ -81,6 +82,7 @@ public class UserManager {
                     .email(resultSet.getString(4))
                     .password(resultSet.getString(5))
                     .type(UserType.valueOf(resultSet.getString(6)))
+                    .pictureUrl(resultSet.getString(7))
                     .build();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -143,7 +145,7 @@ public class UserManager {
         String sql = "select * from user where id = ?"; //stex e problemy
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setInt(1,id); //idn sxal guka
+            statement.setInt(1, id); //idn sxal guka
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 return getUserFromResultSet(resultSet);
@@ -153,7 +155,6 @@ public class UserManager {
         }
         return null;
     }
-
 
 
     public void edit(User user) {
@@ -166,7 +167,7 @@ public class UserManager {
             ps.setString(3, user.getEmail());
             ps.setString(4, user.getPassword());
             ps.setString(5, user.getType().name());
-            ps.setInt(6,user.getId());
+            ps.setInt(6, user.getId());
             ps.executeUpdate();
             System.out.println("user was edited successfully");
         } catch (SQLException e) {
@@ -178,7 +179,7 @@ public class UserManager {
         String sql = "delete from user where id = ?";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setInt(1,id);
+            statement.setInt(1, id);
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

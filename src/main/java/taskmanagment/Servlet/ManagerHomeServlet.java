@@ -4,7 +4,6 @@ import taskmanagment.manager.TaskManager;
 import taskmanagment.manager.UserManager;
 import taskmanagment.model.Task;
 import taskmanagment.model.User;
-import taskmanagment.model.UserType;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,11 +18,12 @@ import java.util.List;
 
 @WebServlet(urlPatterns = "/managerHome")
 public class ManagerHomeServlet extends HttpServlet {
+
+   private TaskManager taskManager = new TaskManager();
+   private UserManager userManager = new UserManager();
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        TaskManager taskManager = new TaskManager();
-        UserManager userManager = new UserManager();
 
         List<Task> allTasks = taskManager.getAllTasks();
         for (Task task : allTasks) {

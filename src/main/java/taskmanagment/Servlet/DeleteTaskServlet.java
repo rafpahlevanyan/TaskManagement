@@ -2,7 +2,6 @@ package taskmanagment.Servlet;
 
 
 import taskmanagment.manager.TaskManager;
-import taskmanagment.manager.UserManager;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -25,7 +24,6 @@ public class DeleteTaskServlet extends HttpServlet {
 
         taskManager.delete(id);
         resp.sendRedirect("/managerHome");
-
 
 
     }
